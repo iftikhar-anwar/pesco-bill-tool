@@ -1,669 +1,522 @@
 <!DOCTYPE html>
-<html lang="en-PK">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PESCO Online Bill Check | View PESCO Electricity Bill Online</title>
-    <meta name="description" content="Check your PESCO online bill instantly. Enter your 14-digit reference number to view, download, or print your PESCO electricity bill copy for free.">
-    <link rel="canonical" href="https://yourwebsite.com/pesco-online-bill/">
-    <meta property="og:title" content="PESCO Online Bill Check - Free & Fast">
-    <meta property="og:description" content="View your PESCO electricity bill online instantly. No signup required.">
-    <meta property="og:type" content="website">
-
-    <!-- Preconnect for Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    <title>Check PESCO Bill Online</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary: #64748b;
-            --bg-page: #f8fafc;
-            --bg-card: #ffffff;
-            --text-heading: #0f172a;
-            --text-body: #334155;
-            --border: #e2e8f0;
-            --error: #ef4444;
-            --success: #22c55e;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --radius: 0.75rem;
-            --transition: all 0.2s ease;
+            --primary-color: #2563EB;
+            /* Royal Blue */
+            --primary-hover: #1D4ED8;
+            --bg-color: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text-main: #1F2937;
+            --text-sub: #6B7280;
+            --border-color: #E5E7EB;
+            --error-color: #EF4444;
+            --success-color: #10B981;
+            --focus-ring: rgba(37, 99, 235, 0.4);
+            --transition-speed: 0.2s;
+            --disabled-color: #9CA3AF;
+            --disabled-bg: #E5E7EB;
         }
 
         /* Reset & Base */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-page);
-            color: var(--text-body);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-        a { text-decoration: none; color: inherit; transition: var(--transition); }
-        button, input { font-family: inherit; }
-
-        /* Layout */
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        /* Hero / Tool Section */
-        .tool-card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-md);
-            padding: 2.5rem 2rem;
-            text-align: center;
-            border: 1px solid var(--border);
-            margin-bottom: 1.5rem;
-        }
-        
-        h1 {
-            color: var(--text-heading);
-            font-size: 1.875rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.025em;
-        }
-        .subtitle {
-            color: var(--secondary);
-            margin-bottom: 2rem;
-            font-size: 1rem;
-        }
-
-        /* Input Group */
-        .input-wrapper {
-            position: relative;
-            max-width: 400px;
-            margin: 0 auto 1.5rem;
-        }
-        .ref-input {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            font-size: 1.25rem;
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            color: var(--text-heading);
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            transition: var(--transition);
-            background: #f8fafc;
-        }
-        .ref-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-        }
-        .ref-input.error { border-color: var(--error); }
-        .ref-input::placeholder { color: #cbd5e1; letter-spacing: normal; }
-        
-        /* Clear Button */
-        .clear-btn {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #94a3b8;
-            cursor: pointer;
-            padding: 4px;
-            display: none;
-            border-radius: 50%;
-        }
-        .clear-btn:hover { background-color: #f1f5f9; color: var(--secondary); }
-        .clear-btn svg { width: 20px; height: 20px; display: block; }
-
-        /* Validation Message */
-        .validation-msg {
-            height: 1.5rem;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-            font-weight: 500;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .validation-msg.visible { opacity: 1; }
-        .validation-msg.error-text { color: var(--error); }
-        .validation-msg.success-text { color: var(--success); }
-
-        /* Actions */
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            font-size: 1.125rem;
-            font-weight: 600;
-            border-radius: var(--radius);
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            max-width: 400px;
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
-        }
-        .btn-primary:hover:not(:disabled) {
-            background-color: var(--primary-dark);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-        .btn-primary:active:not(:disabled) { transform: translateY(0); }
-        .btn-primary:disabled {
-            background-color: #94a3b8;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .help-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 1.5rem;
-            color: var(--secondary);
-            font-size: 0.925rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            text-decoration: underline;
-            text-underline-offset: 4px;
-        }
-        .help-link:hover { color: var(--primary); }
-
-        /* Preference Toggle */
-        .pref-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            font-size: 0.8rem;
-            color: var(--secondary);
-        }
-        
-        /* Trust & Disclaimer */
-        .trust-box {
-            background: #f1f5f9;
-            border-radius: var(--radius);
-            padding: 1rem;
-            margin: 0 auto 3rem;
-            max-width: 600px;
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--secondary);
-            border: 1px solid var(--border);
-        }
-        .trust-box p { margin-bottom: 0.25rem; }
-        .nepra-note {
-            font-size: 0.75rem;
-            margin-top: 0.5rem;
-            font-style: italic;
-            color: #64748b;
-        }
-
-        /* Content Sections */
-        .content-section {
-            margin-bottom: 3rem;
-        }
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-heading);
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        /* Cards Grid */
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-        }
-        .info-card {
-            background: var(--bg-card);
-            padding: 1.5rem;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-sm);
-        }
-        .info-card h3 {
-            font-size: 1.125rem;
-            margin-bottom: 0.75rem;
-            color: var(--text-heading);
-        }
-        .info-card p { font-size: 0.95rem; color: var(--text-body); }
-        .step-num {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 2rem;
-            height: 2rem;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-        /* Internal Links Grid */
-        .link-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        .link-card {
-            display: block;
-            padding: 1rem;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-weight: 500;
-            color: var(--primary);
-            text-align: center;
-            transition: var(--transition);
-        }
-        .link-card:hover {
-            border-color: var(--primary);
-            background: #eff6ff;
-            color: var(--primary-dark);
-        }
-
-        /* FAQ */
-        .faq-item {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            margin-bottom: 1rem;
-            padding: 1.5rem;
-        }
-        .faq-question {
-            font-weight: 600;
-            color: var(--text-heading);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .faq-answer {
-            color: var(--text-body);
-            font-size: 0.95rem;
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        .modal-overlay.open { opacity: 1; pointer-events: auto; }
-        .modal {
-            background: white;
-            padding: 2rem;
-            border-radius: var(--radius);
-            max-width: 500px;
-            width: 90%;
-            position: relative;
-            transform: translateY(20px);
-            transition: transform 0.3s;
-        }
-        .modal-overlay.open .modal { transform: translateY(0); }
-        .close-modal {
-            position: absolute;
-            top: 1rem; right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--secondary);
-        }
-        .ref-diagram {
-            background: #eff6ff;
-            border: 2px dashed #93c5fd;
-            padding: 1.5rem;
-            border-radius: var(--radius);
-            text-align: left;
-            font-family: monospace;
-            margin: 1rem 0;
-            color: var(--text-heading);
-            font-size: 0.9rem;
-        }
-        .highlight { background: #fef08a; padding: 2px 4px; border-radius: 4px; font-weight: bold; }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--secondary);
-            font-size: 0.875rem;
-            border-top: 1px solid var(--border);
-            margin-top: 4rem;
-        }
-
-        /* Utility */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
+        * {
+            box-sizing: border-box;
+            margin: 0;
             padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0,0,0,0);
-            border: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        /* Layout Containers */
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tool-card {
+            width: 100%;
+            max-width: 760px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 24px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        }
+
+        /* Typography */
+        .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .subheading {
+            font-size: 1.125rem;
+            color: var(--text-sub);
+            margin-bottom: 32px;
+            font-weight: 400;
+        }
+
+        /* Form Elements */
+        .form-wrapper {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+            position: relative;
+            text-align: left;
+        }
+
+        .label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1.25rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            outline: none;
+            transition: all var(--transition-speed);
+            background-color: #F9FAFB;
+            color: var(--text-main);
+            font-family: monospace;
+            /* Helps align digits */
+            letter-spacing: 0.05em;
+        }
+
+        input[type="text"]::placeholder {
+            color: #9CA3AF;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: normal;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px var(--focus-ring);
+            background-color: #fff;
+        }
+
+        input[type="text"].error {
+            border-color: var(--error-color);
+            background-color: #FEF2F2;
+        }
+
+        input[type="text"].error:focus {
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+        }
+
+        .helper-text {
+            font-size: 0.875rem;
+            color: var(--text-sub);
+            margin-top: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-weight: 500;
+            display: none;
+            /* Hidden by default */
+        }
+
+        /* OR Separator */
+        .or-separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: var(--text-sub);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .or-separator::before,
+        .or-separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .or-separator:not(:empty)::before {
+            margin-right: .5em;
+        }
+
+        .or-separator:not(:empty)::after {
+            margin-left: .5em;
+        }
+
+        /* Button */
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: white;
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color var(--transition-speed), transform 0.1s;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .btn-primary:disabled {
+            background-color: var(--disabled-bg);
+            color: var(--disabled-color);
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Secondary Links & Toggles */
+        .secondary-actions {
+            margin-top: 24px;
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .link-secondary {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .link-secondary:hover {
+            text-decoration: underline;
+            color: var(--primary-hover);
+        }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--text-sub);
+            cursor: pointer;
+            user-select: none;
+            margin-bottom: 24px;
+        }
+
+        .toggle-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        /* Disclaimer Section - Updated */
+        .disclaimer-block {
+            width: 100%;
+            max-width: 720px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(229, 231, 235, 0.6);
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .disclaimer-content strong {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 640px) {
+            .tool-card {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .subheading {
+                font-size: 1rem;
+            }
+
+            input[type="text"],
+            .btn-primary {
+                padding: 14px;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <main>
-        <!-- Tool Section -->
-        <section class="tool-card">
-            <h1>PESCO Online Bill Check</h1>
-            <p class="subtitle">Enter your 14-digit Reference Number to view your bill copy.</p>
-            
-            <div class="input-wrapper">
-                <label for="refInput" class="sr-only">Reference Number</label>
-                <input type="text" inputmode="numeric" id="refInput" class="ref-input" placeholder="e.g. 1234 567 890 1234" maxlength="17" autocomplete="off">
-                <button id="clearBtn" class="clear-btn" aria-label="Clear input">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+    <main class="container">
+
+        <!-- Tool Card -->
+        <article class="tool-card">
+            <span class="eyebrow">PESCO Online Bill</span>
+            <h1>Check PESCO Bill Online</h1>
+            <p class="subheading">Enter your 14-digit Reference Number to view your duplicate bill.</p>
+
+            <div class="form-wrapper">
+
+                <!-- Field A: Reference Number -->
+                <div class="form-group">
+                    <label for="reference-number" class="label">14-digit Reference Number</label>
+                    <input type="text" id="reference-number" placeholder="e.g., 12345678901234" maxlength="14"
+                        autocomplete="off" aria-describedby="ref-helper-text">
+                    <div class="helper-text" id="ref-helper-text">
+                        <span>No spaces, no dashes.</span>
+                    </div>
+                </div>
+
+                <!-- OR Separator -->
+                <div class="or-separator">OR</div>
+
+                <!-- Field B: Customer ID -->
+                <div class="form-group">
+                    <label for="customer-id" class="label">10-digit Customer ID</label>
+                    <input type="text" id="customer-id" placeholder="e.g., 1234567890" maxlength="10" autocomplete="off"
+                        aria-describedby="cust-helper-text">
+                    <div class="helper-text" id="cust-helper-text">
+                        <span>10 digits only.</span>
+                    </div>
+                </div>
+
+                <!-- Shared Error Message Area -->
+                <div style="text-align: left; margin-top: 8px; min-height: 24px;">
+                    <span class="error-message" id="global-error-msg"></span>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <label class="toggle-group">
+                        <input type="checkbox" id="remember-me">
+                        <span>Remember this number on this device</span>
+                    </label>
+
+                    <button class="btn-primary" id="view-bill-btn" disabled>View Bill</button>
+
+                    <div class="secondary-actions">
+                        <a href="#" class="link-secondary">Where to find Reference Number or Customer ID?</a>
+                    </div>
+                </div>
+
             </div>
-            
-            <div id="validationMsg" class="validation-msg"></div>
+        </article>
 
-            <button id="viewBillBtn" class="btn-primary" disabled>View Bill</button>
-            
-            <div class="pref-toggle">
-                <label>
-                    <input type="checkbox" id="saveRefToggle"> Remember my reference number
-                </label>
-            </div>
-
-            <button id="helpBtn" class="help-link">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Where to find Reference Number?
-            </button>
-        </section>
-
-        <!-- Trust Block -->
-        <div class="trust-box">
-            <p><strong>Disclaimer:</strong> Not affiliated with PESCO or PITC. We do not store your reference number on any server.</p>
-            <p>For payments or official disputes, please contact the PESCO helpline.</p>
-            <p class="nepra-note">Tariff rates are regulated by NEPRA; your exact bill may vary by consumer category, taxes, and adjustments.</p>
-        </div>
-
-        <!-- Quick Steps -->
-        <section class="content-section">
-            <h2 class="section-title">How to Check Your Bill</h2>
-            <div class="grid-3">
-                <div class="info-card">
-                    <div class="step-num">1</div>
-                    <h3>Find Reference No</h3>
-                    <p>Look for the 14-digit Reference Number located on the top left corner of your old electricity bill.</p>
-                </div>
-                <div class="info-card">
-                    <div class="step-num">2</div>
-                    <h3>Enter Digits</h3>
-                    <p>Type the number into the input field above. The tool will automatically validate the digits.</p>
-                </div>
-                <div class="info-card">
-                    <div class="step-num">3</div>
-                    <h3>View & Print</h3>
-                    <p>Click "View Bill" to open the official duplicate bill copy, which you can print or download as PDF.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Info Section -->
-        <section class="content-section">
-            <div class="grid-3">
-                <div class="info-card">
-                    <h3>What is PESCO?</h3>
-                    <p>Peshawar Electric Supply Company (PESCO) distributes electricity to over 2.6 million consumers within Peshawar and surrounding districts of Khyber Pakhtunkhwa.</p>
-                </div>
-                <div class="info-card">
-                    <h3>What is PITC?</h3>
-                    <p>Power Information Technology Company (PITC) creates and maintains the centralized online billing software used by all DISCOs in Pakistan, including PESCO.</p>
-                </div>
+        <!-- Disclaimer Block - Updated -->
+        <section class="disclaimer-block">
+            <div class="disclaimer-content">
+                <strong>Disclaimer:</strong> Not affiliated with PESCO or PITC.<br>
+                We do not store or collect your number on any server.<br>
+                Tariffs are regulated by NEPRA; taxes and adjustments may vary.
             </div>
         </section>
 
-        <!-- Mini FAQ -->
-        <section class="content-section">
-            <h2 class="section-title">Common Problems & Solutions</h2>
-            <div class="faq-item">
-                <div class="faq-question">❌ Bill not found</div>
-                <div class="faq-answer">Ensure the 14-digit reference number is correct. If the bill was just issued, it may take 24-48 hours to appear online.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">❌ Invalid Reference Number</div>
-                <div class="faq-answer">Double-check for typos. The reference number must be exactly 14 digits with no alphabets.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">⚠️ Site not opening</div>
-                <div class="faq-answer"> The PITC server might be down due to heavy traffic. Try again after a few minutes.</div>
-            </div>
-        </section>
-
-        <!-- Internal Links -->
-        <section class="content-section">
-            <h2 class="section-title">Useful Links</h2>
-            <div class="link-grid">
-                <a href="/view-download-bill" class="link-card">View/Download Bill</a>
-                <a href="/bill-calculator" class="link-card">Bill Calculator</a>
-                <a href="/tariff-unit-price" class="link-card">Tariff Unit Prices</a>
-                <a href="/protected-non-protected" class="link-card">Protected vs Unprotected</a>
-                <a href="/load-shedding-peak-hours" class="link-card">Load Shedding Schedule</a>
-                <a href="/complaints" class="link-card">Register Complaint</a>
-                <a href="/duplicate-old-bill" class="link-card">Old Bill History</a>
-                <a href="/faqs" class="link-card">More FAQs</a>
-            </div>
-        </section>
     </main>
 
-    <footer>
-        <p>&copy; 2024 PESCO Bill Check Tool. All rights reserved.</p>
-        <p class="nepra-note">Rates regulated by NEPRA.</p>
-    </footer>
-</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const refInput = document.getElementById('reference-number');
+            const custInput = document.getElementById('customer-id');
+            const viewBtn = document.getElementById('view-bill-btn');
+            const errorMsgSpan = document.getElementById('global-error-msg');
+            const rememberCheckbox = document.getElementById('remember-me');
 
-<!-- Modal -->
-<div id="modalOverlay" class="modal-overlay">
-    <div class="modal">
-        <button id="closeModal" class="close-modal">&times;</button>
-        <h3>Where to find Reference Number?</h3>
-        <p>Your Reference Number is a 14-digit code located in the top-left or top-right section of your electricity bill.</p>
-        <div class="ref-diagram">
-            BATCH NO: 02<br>
-            SUB DIV: 12345<br>
-            REF NO: <span class="highlight">1234 567 890 1234</span>
-        </div>
-        <p>You only need to enter the numbers. Do not include the 'R' or 'U' found at the end of some identifiers.</p>
-    </div>
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const refInput = document.getElementById('refInput');
-        const clearBtn = document.getElementById('clearBtn');
-        const viewBillBtn = document.getElementById('viewBillBtn');
-        const validationMsg = document.getElementById('validationMsg');
-        const saveRefToggle = document.getElementById('saveRefToggle');
-        
-        // Modal elements
-        const helpBtn = document.getElementById('helpBtn');
-        const closeModal = document.getElementById('closeModal');
-        const modalOverlay = document.getElementById('modalOverlay');
-
-        // State
-        const REQUIRED_LENGTH = 14; 
-        
-        // Load saved ref
-        const savedRef = localStorage.getItem('pesco_ref_no');
-        const isSaveEnabled = localStorage.getItem('pesco_save_enabled') === 'true';
-        
-        if (isSaveEnabled) {
-            saveRefToggle.checked = true;
-            if (savedRef) {
-                refInput.value = formatInput(savedRef);
-                validateInput(savedRef);
-            }
-        }
-
-        // Event Listeners
-        refInput.addEventListener('input', handleInput);
-        clearBtn.addEventListener('click', clearInput);
-        viewBillBtn.addEventListener('click', submitForm);
-        saveRefToggle.addEventListener('change', handleToggleSave);
-        
-        // Modal Listeners
-        helpBtn.addEventListener('click', () => modalOverlay.classList.add('open'));
-        closeModal.addEventListener('click', () => modalOverlay.classList.remove('open'));
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) modalOverlay.classList.remove('open');
-        });
-
-        // Key press 'Enter'
-        refInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !viewBillBtn.disabled) {
-                submitForm();
-            }
-        });
-
-        function handleInput(e) {
-            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
-            
-            // Limit to 14 digits
-            if (value.length > REQUIRED_LENGTH) {
-                value = value.slice(0, REQUIRED_LENGTH);
+            // --- 1. Load from LocalStorage ---
+            const savedData = JSON.parse(localStorage.getItem('pesco_bill_data'));
+            if (savedData) {
+                if (savedData.type === 'ref') {
+                    refInput.value = savedData.value;
+                } else if (savedData.type === 'cust') {
+                    custInput.value = savedData.value;
+                }
+                rememberCheckbox.checked = true;
+                validateAndToggleState(); // Initial check
             }
 
-            // Visual formatting: 1234 567 890 1234
-            e.target.value = formatInput(value);
-            
-            validateInput(value);
-            toggleClearBtn(value);
-        }
+            // --- 2. Input Logic (Digits Only & Mutual Exclusion) ---
 
-        function formatInput(value) {
-            // Groups of 4, 3, 3, 4 is common but simple grouping of 4-5 is fine. 
-            // Request said: "1234 567 890 1234" (4, 3, 3, 4)
-            if (value.length === 0) return '';
-            
-            // Apply formatting logic only for display
-            // Group 1: 0-4
-            // Group 2: 4-7
-            // Group 3: 7-10
-            // Group 4: 10-14
-            let formatted = '';
-            if (value.length > 0) formatted += value.substring(0, 4);
-            if (value.length > 4) formatted += ' ' + value.substring(4, 7);
-            if (value.length > 7) formatted += ' ' + value.substring(7, 10);
-            if (value.length > 10) formatted += ' ' + value.substring(10, 14);
-            
-            return formatted;
-        }
+            function handleInput(e, type) {
+                const val = e.target.value;
 
-        function validateInput(digits) {
-            const length = digits.length;
-            
-            if (length === 0) {
-                setMsg('', '');
-                viewBillBtn.disabled = true;
+                // Allow digits only
+                if (/\D/.test(val)) {
+                    e.target.value = val.replace(/\D/g, '');
+                }
+
+                // Mutual Exclusion
+                if (e.target.value.length > 0) {
+                    if (type === 'ref') {
+                        custInput.value = ''; // Clear other
+                        custInput.classList.remove('error');
+                    } else {
+                        refInput.value = ''; // Clear other
+                        refInput.classList.remove('error');
+                    }
+                }
+
+                validateAndToggleState();
+            }
+
+            refInput.addEventListener('input', (e) => handleInput(e, 'ref'));
+            custInput.addEventListener('input', (e) => handleInput(e, 'cust'));
+
+            // --- 3. Validation & State Management ---
+
+            function showError(message, inputElement) {
+                errorMsgSpan.textContent = message;
+                errorMsgSpan.style.display = 'block';
+                if (inputElement) inputElement.classList.add('error');
+            }
+
+            function clearErrors() {
+                errorMsgSpan.style.display = 'none';
                 refInput.classList.remove('error');
-            } else if (length < REQUIRED_LENGTH) {
-                setMsg(`Enter ${REQUIRED_LENGTH - length} more digits`, 'error-text');
-                viewBillBtn.disabled = true;
-                refInput.classList.add('error');
-            } else if (length === REQUIRED_LENGTH) {
-                setMsg('Valid Reference Number', 'success-text');
-                viewBillBtn.disabled = false;
-                refInput.classList.remove('error');
-            }
-        }
-
-        function setMsg(text, className) {
-            validationMsg.textContent = text;
-            validationMsg.className = 'validation-msg visible ' + className;
-        }
-
-        function toggleClearBtn(value) {
-            clearBtn.style.display = value.length > 0 ? 'block' : 'none';
-        }
-
-        function clearInput() {
-            refInput.value = '';
-            refInput.focus();
-            validateInput('');
-            toggleClearBtn('');
-        }
-
-        function handleToggleSave(e) {
-            const isChecked = e.target.checked;
-            localStorage.setItem('pesco_save_enabled', isChecked);
-            if (!isChecked) {
-                localStorage.removeItem('pesco_ref_no');
-            }
-        }
-
-        function submitForm() {
-            const rawValue = refInput.value.replace(/\D/g, '');
-            if (rawValue.length !== REQUIRED_LENGTH) return;
-
-            // Save if enabled
-            if (saveRefToggle.checked) {
-                localStorage.setItem('pesco_ref_no', rawValue);
+                custInput.classList.remove('error');
             }
 
-            const baseUrl = "https://bill.pitc.com.pk/pescobill/general?refno=";
-            window.open(baseUrl + rawValue, '_blank');
-        }
-    });
-</script>
+            function validateAndToggleState() {
+                clearErrors();
+                const refVal = refInput.value;
+                const custVal = custInput.value;
+                let isValid = false;
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [{
-    "@type": "Question",
-    "name": "Why is my PESCO bill not found?",
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": "Ensure the 14-digit reference number is correct. If the bill was just issued, it may take 24-48 hours to appear online."
-    }
-  }, {
-    "@type": "Question",
-    "name": "How do I find my reference number?",
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": "Your Reference Number is a 14-digit code located in the top-left or top-right section of your electricity bill."
-    }
-  }, {
-    "@type": "Question",
-    "name": "What should I do if the PITC site is not opening?",
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": "The PITC server might be down due to heavy traffic. Try again after a few minutes."
-    }
-  }]
-}
-</script>
+                if (refVal.length === 14) isValid = true;
+                if (custVal.length === 10) isValid = true;
+
+                viewBtn.disabled = !isValid;
+            }
+
+            // --- 4. Submit Logic ---
+
+            viewBtn.addEventListener('click', () => {
+                const refVal = refInput.value;
+                const custVal = custInput.value;
+
+                // Final Validation Check (redundant if disabled works, but good for safety)
+                if (!refVal && !custVal) {
+                    showError('Enter your 14-digit reference number OR 10-digit customer ID.');
+                    return;
+                }
+
+                if (refVal) {
+                    if (refVal.length !== 14) {
+                        showError(refVal.length < 14 ? 'Reference number must be exactly 14 digits.' : 'Please enter exactly 14 digits (no spaces).', refInput);
+                        return;
+                    }
+                    processLogin(refVal, 'ref');
+                } else if (custVal) {
+                    if (custVal.length !== 10) {
+                        showError(custVal.length < 10 ? 'Customer ID must be exactly 10 digits.' : 'Please enter exactly 10 digits.', custInput);
+                        return;
+                    }
+                    processLogin(custVal, 'cust');
+                }
+            });
+
+            function processLogin(value, type) {
+                // Store if remembered
+                if (rememberCheckbox.checked) {
+                    localStorage.setItem('pesco_bill_data', JSON.stringify({ value, type }));
+                } else {
+                    localStorage.removeItem('pesco_bill_data');
+                }
+
+                // Redirect
+                if (type === 'ref') {
+                    // Ref URL
+                    const billUrl = `https://bill.pitc.com.pk/pescobill/general?ref=${value}`;
+                    window.open(billUrl, '_blank');
+                } else {
+                    // Customer ID URL (Fallback to main page or specific if known)
+                    // Note: Direct URL for CustID is not standard, linking to general search or ref search if pattern matches
+                    // For now, assuming PITC handles it or user needs to use the Ref on that page if CustID isn't direct.
+                    // But typically CustID is used on landing pages. 
+                    // Since user asked for "Link to PESCO", we'll send them to the general PESCO bill page on PITC 
+                    // OR if there is a known CustID param. 
+                    // Current best effort:
+                    const billUrl = `https://bill.pitc.com.pk/pescobill/scan?ref=${value}`; // 'scan' is sometimes used for searches, or just /general
+                    // Better approach: Since we don't know the EXACT CustID endpoint, we'll try the same endpoint but maybe it accepts both? 
+                    // If not, we'll just open the main portal.
+                    // But actually, `bill.pitc.com.pk/pescobill/general?ref=` expects 14 digits.
+                    // Let's open the main portal for Customer ID users so they can choose the option there if we can't deep link.
+                    // However, often these systems map CustID internally. 
+                    // Let's try the deep link, but if it fails, the user will see the error on PITC.
+                    const billUrl2 = `https://bill.pitc.com.pk/pescobill/general?cust=${value}`; // Guessing param
+                    // Valid fallback:
+                    window.open(`https://bill.pitc.com.pk/pescobill/`, '_blank');
+                }
+            }
+
+            // Allow "Enter" key
+            const handleEnter = (e) => {
+                if (e.key === 'Enter' && !viewBtn.disabled) {
+                    viewBtn.click();
+                }
+            };
+            refInput.addEventListener('keypress', handleEnter);
+            custInput.addEventListener('keypress', handleEnter);
+        });
+    </script>
 </body>
+
 </html>
